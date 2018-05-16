@@ -1,7 +1,8 @@
 // Get references to the tbody element, input field and button
 var $tbody = document.querySelector("tbody");
-var $stateInput = document.querySelector("#state");
+var $dateInput = document.querySelector("#date");
 var $searchBtn = document.querySelector("#search");
+
 
 // Add an event listener to the searchButton, call handleSearchButtonClick when clicked
 $searchBtn.addEventListener("click", handleSearchButtonClick);
@@ -30,17 +31,47 @@ function renderTable() {
 }
 
 function handleSearchButtonClick() {
-  // Format the user's search by removing leading and trailing whitespace, lowercase the string
-  var filterState = $stateInput.value.trim().toLowerCase();
+  var filterDate = $dateInput.value;
 
-  // Set filteredAddresses to an array of all addresses whose "state" matches the filter
-  filteredUFOData = dataSet.filter(function(ufoData) {
-    var ufoState = ufoData.state.toLowerCase();
+  // reformat date to data.js format and save in VAR
+  filterDate = changeDateFormat(filterDate);
+  console.log(filterDate);
+
+  filteredUFOData = dataSet.filter(function(UFOData) {
+    var ufoDate = UFOData.datetime;
 
     // If true, add the address to the filteredAddresses, otherwise don't add it to filteredAddresses
-    return ufoState === filterState;
+    return ufoDate === filterDate;
   });
+
+  // // Set filteredAddresses to an array of all addresses whose "state" matches the filter
+  // filteredUFOData = dataSet.filter(function(ufoData) {
+  //   var ufoState = ufoData.state.toLowerCase();
+
+  //   // If true, add the address to the filteredAddresses, otherwise don't add it to filteredAddresses
+  //   return ufoState === filterState;
+  // });
   renderTable();
 }
+
+function changeDateFormat(inputDate){  // expects Y-m-d
+    var splitDate = inputDate.split('-');
+    if(splitDate.count == 0){
+        return null;
+    }
+
+    var year = splitDate[0];
+    var month = splitDate[1];
+    var day = splitDate[2];
+
+    if (month.charAt(0) === '0') month = month.replace("0", "");
+    if (day.charAt(0) === '0') day = day.replace("0", "");
+
+    console.log(splitDate[1]);
+    console.log(splitDate[2]);
+
+    return month + '/' + day + '/' + year;
+}
+
 // Render the table for the first time on page load
-renderTable();
+// renderTable();
